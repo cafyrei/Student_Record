@@ -1,0 +1,8 @@
+# Ignore Python cache files
+assets/pages/__pycache__
+assets/backend/__pycache__
+assets/backend/env__pycache__
+
+# Ignore Python bytecode files
+.vscode/settings.json
+assets/backend/env/keys/private_key.pem
