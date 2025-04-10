@@ -7,4 +7,62 @@ with open('assets/backend/env/keys/public_key.pem', 'wb') as file:
 with open('assets/backend/env/keys/private_key.pem', 'wb') as file:
     file.write(private_key.save_pkcs1(format='PEM')) 
 
+    
+
+Database Insertion Query
+
+    self.connection = Connection()
         
+    db = self.connection.connect()
+    cursor = db.cursor()    
+            
+    username = 'third_admin'
+            
+    account_creation = datetime.datetime.now()
+    format_time = account_creation.strftime("%Y-%m-%d %H:%M:%S")
+        
+    cursor.execute("INSERT INTO administrator (username, admin_account, password_hash, last_login) VALUES (%s, %s, %s, %s)", (username, self.admin_encrypted_acc, self.admin_encrypted_password, format_time))
+    db.commit()
+    
+
+# Flood Database with admin VALUES
+import random
+import string
+import datetime
+from assets.backend.config.connection import Connection
+from assets.backend.security.encryption.rsa_encryption import Encryption
+from assets.backend.security.hashing.bcrypt_hashing import Hash
+
+class DataFiller:
+    def __init__(self):
+        self.connection = Connection()
+        self.encryption = Encryption()
+
+    def random_string(self, length=10):
+        """Generate a random string of uppercase letters for usernames/accounts."""
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
+    def flood_database(self, num_entries=100):
+        """Flood the database with dummy data."""
+        db = self.connection.connect()
+        cursor = db.cursor()
+
+        for _ in range(num_entries):
+            admin_account = self.random_string(12)  # Random account number
+            admin_password = self.random_string(16)  # Random password
+
+            # Encrypt the data
+            admin_encrypted_acc = self.encryption.encrypt_data(admin_account)  # Encrypt account number
+            admin_encrypted_password = Hash.hash_password(admin_password)  # Hash password with bcrypt
+
+            # Account creation timestamp
+            account_creation = datetime.datetime.now()
+            format_time = account_creation.strftime("%Y-%m-%d %H:%M:%S")
+
+            # Inserting into the database
+            cursor.execute("INSERT INTO administrator (username, admin_account, password_hash, last_login) VALUES (%s, %s, %s, %s)",
+                           (self.random_string(8), admin_encrypted_acc, admin_encrypted_password, format_time))
+
+            db.commit()  # Commit after each insertion (you could batch this to optimize)
+
+        print(f"{num_entries} records inserted into the database.")

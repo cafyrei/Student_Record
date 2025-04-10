@@ -1,8 +1,11 @@
 from PIL import Image
+from assets.backend.security.hashing.bcrypt_hashing import Hash
 from assets.backend.auth.login_authentication import Authentication
-from assets.backend.env.encryption import Encryption
+from assets.backend.security.encryption.rsa_encryption import Encryption
 import customtkinter as ctk
 import rsa
+import datetime
+from assets.backend.config.connection import Connection
     
 class Login(ctk.CTkFrame):
     def __init__(self, master):
@@ -68,11 +71,11 @@ class Login(ctk.CTkFrame):
             print("Please fill in all fields")
             return
         
-        self.admin_account = self.account_entry.get()
-        self.admin_password = self.account_password_entry.get()
+        self.admin_account = self.account_entry.get() # ACCOUNT 
+        self.admin_password = self.account_password_entry.get() # PASSWORD       
         
-        # Encrypt the data
-        self.admin_encrypted_acc, self.admin_encrypted_password, = self.encryption.encrypt_data(self.admin_account, self.admin_password)
+        self.admin_encrypted_acc = self.encryption.encrypt_data(self.admin_account) # Encrypt the account number with RSA
+        self.admin_encrypted_password = self.encryption.encrypt_data(self.admin_password) # Encrypt the password with RSA
         
         # Create an instance of the Authentication class
         self.auth = Authentication(self.admin_encrypted_acc, self.admin_encrypted_password)

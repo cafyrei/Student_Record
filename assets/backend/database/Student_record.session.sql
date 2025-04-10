@@ -8,7 +8,13 @@ CREATE TABLE IF NOT EXISTS administrator (
     account_created DATETIME DEFAULT CURRENT_TIMESTAMP,
     account_update DATE
 );
-DROP TABLE administrator;
+
 DESCRIBE administrator;
-SELECT *
-FROM world;
+
+DROP TABLE world;
+
+SELECT * FROM administrator;
+DELETE FROM administrator;
+
+
+DELETE FROM administrator WHERE id = 7;
