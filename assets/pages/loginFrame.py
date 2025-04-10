@@ -77,7 +77,7 @@ class Login(ctk.CTkFrame):
         # Create an instance of the Authentication class
         self.auth = Authentication(self.admin_encrypted_acc, self.admin_encrypted_password)
         
-        # Clear tghe entry fields after fetching the data
+        # Clear the entry fields after fetching the data
         self.account_entry.delete(0, ctk.END)
         self.account_password_entry.delete(0, ctk.END)
         

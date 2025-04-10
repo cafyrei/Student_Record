@@ -2,6 +2,8 @@
 assets/pages/__pycache__
 assets/backend/__pycache__
 assets/backend/env__pycache__
+assets/backend/auth/__pycache__
+assets/backend/env/__pycache__
 
 # Ignore Python bytecode files
 .vscode/settings.json
