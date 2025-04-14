@@ -4,6 +4,8 @@ assets/backend/security/hashing/__pycache__
 assets/backend/security/encryption/__pycache__
 assets/backend/auth/__pycache__
 assets/backend/config/__pycache__
+assets/pages/main/__pycache__
+assets/backend/controller/__pycache__
 
 # Ignore Python bytecode files
 .vscode/settings.json

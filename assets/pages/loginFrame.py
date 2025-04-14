@@ -3,25 +3,26 @@ from assets.backend.security.hashing.bcrypt_hashing import Hash
 from assets.backend.auth.login_authentication import Authentication
 from assets.backend.security.encryption.rsa_encryption import Encryption
 import customtkinter as ctk
-import rsa
-import datetime
-from assets.backend.config.connection import Connection
-    
+
 class Login(ctk.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master, controller):
         super().__init__(master)
         
+        self.controller = controller
+        
         self.encryption = Encryption()
-            
+    
         # Main frame Configuration
         self.configure(width=350, 
                        height=350,
-                       corner_radius=30)
+                       corner_radius=30,
+                       )
         self.pack_propagate(False)
-        
+
         # Main sub Frame components
         self.image_frame = ctk.CTkFrame(self, fg_color='transparent')
         self.login_frame = ctk.CTkFrame(self, fg_color='transparent')
+        self.top_frame = ctk.CTkFrame(self, fg_color='transparent')
         
         # Image Frame Components
         try: 
@@ -44,6 +45,8 @@ class Login(ctk.CTkFrame):
         self.account_password_entry.configure(height=40, width=250, show='•')
         self.submit_button.configure(font=('Arial', 14, 'bold'), command=self.fetch_data)
     
+    
+        ''' Frame packing on this section '''   
         # Define a Grid for the login frame
         self.login_frame.grid_columnconfigure(0, weight=1) # Number of Columns
         for i in range (6): # Number of Rows 
@@ -66,6 +69,7 @@ class Login(ctk.CTkFrame):
         self.image_frame.pack()
         self.login_frame.pack()
             
+    ''' Fetches inputs from the entry and deliver it to the Authentication class '''
     def fetch_data(self):
         if self.account_entry.get() == '' or self.account_password_entry.get() == '':
             print("Please fill in all fields")
@@ -77,11 +81,13 @@ class Login(ctk.CTkFrame):
         self.admin_encrypted_acc = self.encryption.encrypt_data(self.admin_account) # Encrypt the account number with RSA
         self.admin_encrypted_password = self.encryption.encrypt_data(self.admin_password) # Encrypt the password with RSA
         
-        # Create an instance of the Authentication class
-        self.auth = Authentication(self.admin_encrypted_acc, self.admin_encrypted_password)
-        
         # Clear the entry fields after fetching the data
         self.account_entry.delete(0, ctk.END)
         self.account_password_entry.delete(0, ctk.END)
         
+        # Create an instance of the Authentication class
+        self.auth = Authentication(self.admin_encrypted_acc, self.admin_encrypted_password)
+        
+        if self.auth :
+            self.controller.switch_frame('Main_Menu')
         

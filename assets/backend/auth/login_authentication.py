@@ -11,8 +11,7 @@ class Authentication:
         self.connection = Connection()   
         self.hash = Hash()
         
-        self.time_taken = 0.0
-        
+        self.time_taken = 0.0  
             
         self.login_status = self.authenticate()
         
@@ -53,3 +52,4 @@ class Authentication:
         finally:
             cursor.close()
             db.close()
+            

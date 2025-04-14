@@ -14,6 +14,7 @@ def on_closing():
     print(f"🚀 Peak memory usage: {peak / 10**6:.6f} MB")
     tracemalloc.stop()
     window.destroy()
+    
 
 # window = Window()
 window.protocol("WM_DELETE_WINDOW", on_closing)
