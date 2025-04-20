@@ -58,7 +58,7 @@ class Main_Frame(ctk.CTkFrame):
         
         # Bottom button initialization
         self.student_records_btn = ctk.CTkButton(self.bottom_frame, text='Student Records',command=lambda: self.controller.switch_frame('Student_Registration'))
-        self.search_btn = ctk.CTkButton(self.bottom_frame, text='Search')
+        self.search_btn = ctk.CTkButton(self.bottom_frame, text='Search', command=lambda: self.controller.switch_frame('Search'))
         self.statistics_btn = ctk.CTkButton(self.bottom_frame, text='Statistic')
         self.settings_btn = ctk.CTkButton(self.bottom_frame, text='Settings')
         self.help_btn = ctk.CTkButton(self.bottom_frame, text='Help')

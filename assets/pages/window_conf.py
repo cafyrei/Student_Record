@@ -10,8 +10,8 @@ class Window(ctk.CTk):
         # Root main elements
         self.title("EduPass")
         self.geometry("900x600")
-        self.resizable(True, True)
-        self.iconbitmap(r'assets\img\main_page\icon.ico')
+        self.resizable(False, False)
+        self.iconbitmap(r'assets/img/main_page/icon.ico')
     
         # Initialize Componets
         self.start = Controller(self)

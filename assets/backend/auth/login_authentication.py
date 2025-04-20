@@ -31,12 +31,12 @@ class Authentication:
                 self.decrypted_account_no = self.decryption.decrypt_data(result[0], self.account_Number)
                 self.decrypted_account_password = self.hash.check_password(self.password, result[1])
                 
-                print(f"Decrypted Account Number: {self.decrypted_account_no}")
-                print(f"Decrypted Account Password: {self.decrypted_account_password}") 
-                
                 end_time = time.perf_counter()
                 self.time_taken += end_time - start_time
                 
+                print(f"Decrypted Account Number: {self.decrypted_account_no}")
+                print(f"Decrypted Account Password: {self.decrypted_account_password}")
+                 
                 if self.decrypted_account_no and self.decrypted_account_password:
                     valid = True
                     break    

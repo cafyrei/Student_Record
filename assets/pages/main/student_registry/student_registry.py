@@ -4,113 +4,106 @@ import customtkinter as ctk
 class Register_Student(ctk.CTkFrame):
     def __init__(self, master, controller):
         super().__init__(master)
-        self.controller = controller
-        self.current_frame = None
+        self.controller = controller   
+        
+        self.student_information = []
+
         # Self Configuration
-        self.configure(width=700,
-                       height=500,
-                       corner_radius=15,
-                       fg_color='#252525'
-                       )
-        self.pack_propagate(False)
+        self.configure(width=700, height=500, corner_radius=15, fg_color='#252525')
         
         # Initialize a Main Frame
-        self.main_frame = ctk.CTkFrame(self,
-                                  fg_color='#252525',
-                                  height=480,
-                                  width=680,
-                                  corner_radius=15,
-                                  ) 
-                                      
+        self.main_frame = ctk.CTkFrame(self, fg_color='#252525',height=480,width=680,corner_radius=15) 
+                    
+        # Create Grid for the main frame`           
+        for column in range(6):
+            if column == 4 :
+                 self.main_frame.grid_columnconfigure(column, weight=2)
+                 continue
+            self.main_frame.grid_columnconfigure(column, weight=1)
+        for row in range(13):
+            self.main_frame.grid_rowconfigure(row, weight=1)
+        
+        # Store label variables to initialize labels faster
+        label_dict = {
+            'first_name_label': 'First Name : ',
+            'last_name_label': 'Last Name : ',
+            'middle_name_label': 'Middle Name : ',
+            'birthday_label': 'Birthday : ',
+            'age_label': 'Age : ',
+            'contact_no_label': 'Contact No. : ',
+            'guardian_name_label': 'Guardinan Name : ', 
+            'guardian_no_label': 'Guardian No. : ',
+            'address_label': 'Address : '
+        }
+        
+        # Store entry variables to initialize labels faster
+        entry_dict = {
+            'first_name_entry': 'First Name',
+            'last_name_entry': 'Last Name',
+            'middle_name_entry': 'Middle Name',
+            'birthday_entry': 'Birthday (YYYY-MM-DD)',
+            'age_entry': 'Age',
+            'contact_no_entry': 'Contact No.',
+            'guardian_name_entry': 'Guardinan Name', 
+            'guardian_no_entry': 'Guardian No.',
+            'address_entry': 'Address'
+        }
+        
+        # Store buttons in a dictionary for faster initialization
+        btn_dict = {
+            'back_btn':'Back', 
+            'next_btn':'Next'
+        }
+        
+        # Control for grid layout
+        row = 2
+        column = 0
+
+        # Store labels and entry in empty dictionary to access for later
+        self.label = {}
+        self.entry = {}
+        self.btn = {}
+        
+        # Main label for the whole Registration 
+        main_label = ctk.CTkLabel(self.main_frame, text='Student Demographics Registration', text_color='white', font=('anonymous pro', 18, 'bold'))
+        main_label.grid(row=1, column=0, columnspan=6)
+        
+        for key, value in label_dict.items() :
+            label = ctk.CTkLabel(self.main_frame, text=value, text_color='white', font=('anonymous pro', 14, 'bold'))
+            self.label[key] = label
+            if key == 'address_entry':
+                label.grid(row=row, column=3, pady=1, sticky='ne', columnspan=2, rowspan=2)
+                continue
+            label.grid(row=row, column=2, pady=1, sticky='e')
+            row += 1      
+            
+        row = 2
+        for key, value in entry_dict.items() :
+            entry = ctk.CTkEntry(self.main_frame, placeholder_text=value)
+            self.entry[key] = entry
+            if key == 'address_entry':
+                entry.grid(row=row, column=3, pady=1, sticky='nsew', columnspan=2, rowspan=2)
+                continue
+            entry.grid(row=row, column=3, pady=1, sticky='ew', columnspan=2)
+            row += 1
+        
+        for key, value in btn_dict.items()  :
+            btn = ctk.CTkButton(self.main_frame, text=value, width=100, height=40, fg_color="#3a3a3a", hover_color="#0096C9")
+            self.btn[key] = btn
+            btn.grid(row=13, column=column, pady=1, sticky='nsew', columnspan=1)
+            column += 5
+            
+        self.btn['next_btn'].configure(command=self.next_btn)
+        self.btn['back_btn'].configure(command=self.back_btn, hover_color="#C90102",)
+            
+        
+        # Propagate the main frame and the self frame to false                              
+        self.pack_propagate(False)
+        self.main_frame.pack()      
         self.main_frame.grid_propagate(False)
         
-        # Define a Grid for the whole main_frame
-        for column in range(7):
-            self.main_frame.grid_columnconfigure(column, weight=2)
-        
-        for row in range(14):
-            self.main_frame.grid_rowconfigure(row, weight=0)
+    def back_btn(self):
+        self.controller.switch_frame('Main_Menu')
 
-        # Define a list of Label to quickly initialize Label       
-        label_list = [
-            ('registration_label', 'STUDENT REGISTRATION FORM'),
-            ('age_label', 'Age')
-        ]
-
-        # Define a list of Entry to quickly initialize Entry
-        entry_list = [
-            ('first_name_label', 'First Name', 'first_name_entry'),
-            ('last_name_label','Last Name', 'last_name_entry'),
-            ('middle_name_label','Middle Name', 'middle_name_entry'),
-            ('phone_number_label','Phone Number', 'contact_info_entry'),
-            ('address_label','Address', 'address_entry'),
-            ('nationality_label','Nationality', 'nationality_entry'),
-            ('guardian_label','Guardian Name', 'guardian_entry'),
-            ('guardian_no_label','Guardian No.', 'guardian_no_entry'),
-            ('birthday_label','Birthday (YYYY-MM-DD)', 'birthday_entry'),
-        ]
-        
-        # Create Label for each item in the label_list
-        for i, (label_name, text) in enumerate(label_list):
-            label = ctk.CTkLabel(self.main_frame, text=text)
-            setattr(self.main_frame, label_name, label)
-        # Genereate Drop down values for Age
-        age_options = [str (i) for i in range(1,100)]
-        
-        self.age_dropdown = ctk.CTkComboBox(self.main_frame, values=age_options, width=55)
-        self.main_frame.registration_label.configure(font=('Futura', 19, 'bold'))
-        self.submit_btn = ctk.CTkButton(self.main_frame, text='Next', command=self.submit_student_registration)
-        self.back_btn = ctk.CTkButton(self.main_frame, text='Back', command=lambda: self.controller.switch_frame('Main_Menu'))
-
-        
-        # Create Entry for each item in the entry_list 
-        for i, (label_name, text, entry_name) in enumerate(entry_list):
-            label = ctk.CTkLabel(self.main_frame, text=text) 
-            entry = ctk.CTkEntry(self.main_frame, placeholder_text=text)
-            setattr(self.main_frame, label_name, label)
-            setattr(self.main_frame, entry_name, entry)
-
-        # Grid layout
-        self.main_frame.registration_label.grid(row=0, column=1, sticky='nsew', columnspan=5, pady=15)  
-          
-        self.main_frame.first_name_label.grid(row=1, column=1, sticky='w', padx=50)
-        self.main_frame.first_name_entry.grid(row=2, column=1, sticky='nsew', columnspan=2, padx=50)
-        
-        self.main_frame.last_name_label.grid(row=1, column=3, sticky='w', padx=50)
-        self.main_frame.last_name_entry.grid(row=2, column=3, sticky='nsew', columnspan=2, padx=50)
-            
-        self.main_frame.middle_name_label.grid(row=3, column=1, sticky='w', padx=50)
-        self.main_frame.middle_name_entry.grid(row=4, column=1, sticky='nsew', columnspan=2, padx=50)
-        
-        self.main_frame.age_label.grid(row=3, column=3, sticky='w', padx=50)
-        self.age_dropdown.grid(row=4, column=3, sticky='w', padx=50)
-
-        self.main_frame.birthday_label.grid(row=3, column=3, sticky='e', columnspan=2, padx=50)
-        self.main_frame.birthday_entry.grid(row=4, column=3, sticky='e', columnspan=2, padx=50)
-        
-        self.main_frame.phone_number_label.grid(row=5, column=1, sticky='w', columnspan=2, padx=50)
-        self.main_frame.contact_info_entry.grid(row=6, column=1, sticky='nsew', columnspan=2, padx=50)
-        
-        self.main_frame.nationality_label.grid(row=5, column=3, sticky='w', columnspan=2, padx=50)
-        self.main_frame.nationality_entry.grid(row=6, column=3, sticky='nsew', columnspan=2, padx=50)
-        
-        self.main_frame.guardian_label.grid(row=7, column=1, sticky='w', columnspan=4, padx=50)
-        self.main_frame.guardian_entry.grid(row=8, column=1, sticky='we', columnspan=4, padx=50)
-        
-        self.main_frame.guardian_no_label.grid(row=9, column=1, sticky='w', columnspan=4, padx=50)
-        self.main_frame.guardian_no_entry.grid(row=10, column=1, sticky='we', columnspan=4, padx=50)
-        
-        self.main_frame.address_label.grid(row=11, column=1, sticky='w', columnspan=4, padx=50)
-        self.main_frame.address_entry.grid(row=12, column=1, sticky='we', columnspan=4, padx=50)
-        
-        self.submit_btn.grid(row=14, column=3, sticky='e', columnspan=2, pady=20, padx=50)
-        self.back_btn.grid(row=14, column=1, sticky='w', columnspan=2, pady=20, padx=50)
-        
-        # Pack the Main Frame
-        self.main_frame.pack_propagate(False)
-        self.main_frame.pack(expand=True)
-
-            
-    def submit_student_registration(self):
-        print('Hellow World!')
-        
+    def next_btn(self):
+        self.controller.switch_frame('Camera_Frame')
