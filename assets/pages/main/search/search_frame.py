@@ -44,7 +44,7 @@ class Search(ctk.CTkFrame):
         self.search_filter = ctk.CTkOptionMenu(self.search_frame, variable=selected_option, height=40, width=30,values=filter_options)
         
         # Load Database and Enter
-        headers = ["Student No.", "First Name", "Middle Name", "Last Name", "Phone Number", "Birthday", "Nationality"]
+        headers = ["Student No.", "First Name", "Middle Name", "Last Name", "Phone Number", "Birthday", "Course"]
         for col, header in enumerate(headers):
             label = ctk.CTkLabel(self.header_frame, text=header, fg_color="gray20", width=120)
             label.grid(row=0, column=col, padx=4, pady=5)
@@ -80,7 +80,7 @@ class Search(ctk.CTkFrame):
         cursor = db.cursor()
         
         try: 
-            query = 'SELECT student_number, first_name, middle_name, last_name, phone_no, date_of_birth, nationality FROM student_records'
+            query = 'SELECT student_number, first_name, middle_name, last_name, phone_no, date_of_birth, course FROM student_records'
             cursor.execute(query)
             results = cursor.fetchall()
             

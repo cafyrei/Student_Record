@@ -1,4 +1,6 @@
 from assets.backend.config.connection import Connection
+from assets.backend.process.id_gen_backend.genereate_student_num import StudentNumberGenerator
+from assets.pages.main.student_registry.camera_registration import Camera_Frame
 import customtkinter as ctk
 
 class Register_Student(ctk.CTkFrame):
@@ -29,7 +31,7 @@ class Register_Student(ctk.CTkFrame):
             'last_name_label': 'Last Name : ',
             'middle_name_label': 'Middle Name : ',
             'birthday_label': 'Birthday : ',
-            'age_label': 'Age : ',
+            'course_label': 'Course : ',
             'contact_no_label': 'Contact No. : ',
             'guardian_name_label': 'Guardinan Name : ', 
             'guardian_no_label': 'Guardian No. : ',
@@ -42,9 +44,9 @@ class Register_Student(ctk.CTkFrame):
             'last_name_entry': 'Last Name',
             'middle_name_entry': 'Middle Name',
             'birthday_entry': 'Birthday (YYYY-MM-DD)',
-            'age_entry': 'Age',
+            'course_entry': 'Course',
             'contact_no_entry': 'Contact No.',
-            'guardian_name_entry': 'Guardinan Name', 
+            'guardian_name_entry': 'Guardian Name', 
             'guardian_no_entry': 'Guardian No.',
             'address_entry': 'Address'
         }
@@ -106,4 +108,22 @@ class Register_Student(ctk.CTkFrame):
         self.controller.switch_frame('Main_Menu')
 
     def next_btn(self):
-        self.controller.switch_frame('Camera_Frame')
+        fetch_student_data = {}
+        for key, value in self.entry.items():
+            if value.get() == '':
+                print(f"Please fill the Information {key}")
+                return
+            
+            if key == 'first_name_entry':
+                first_name = value.get()
+            elif key == 'last_name_entry':
+                last_name = value.get()
+            elif key == 'middle_name_entry':
+                middle_name = value.get()
+                fetch_student_data['fullname'] = first_name + ' ' + last_name + ', ' + ' ' +  middle_name 
+            fetch_student_data[key] = value.get()
+
+        student_no = StudentNumberGenerator.student_number_generator()
+        fetch_student_data['student_number'] = student_no        
+            
+        self.controller.switch_frame_data_transfer('Camera_Frame', fetch_student_data)

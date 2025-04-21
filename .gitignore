@@ -5,6 +5,7 @@ assets/backend/auth/__pycache__
 assets/backend/config/__pycache__
 assets/backend/process/__pycache__
 assets/backend/controller/__pycache__
+assets/pages/main/attendance/__pycache__
 assets/pages/__pycache__
 assets/pages/main/__pycache__
 assets/pages/main/student_registry/__pycache__

@@ -1,7 +1,7 @@
 import qrcode
 
 class QRCodeGenerator:
-    def __init__(self, data: str, filename: str):
+    def generete_qr(self, data: str, filename: str):
 
         qr = qrcode.QRCode(
             version=1,  # Controls the size of the QR code
@@ -14,7 +14,7 @@ class QRCodeGenerator:
         qr.make(fit=True)
         
         student_qr = qr.make_image(fill='black', back_color='white')
-        student_qr.save(filename)
+        student_qr.save(f'assets/img/collection_qr/{filename}.png   ')
 
         
 
